@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Ungadi - Authentication</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #000000, #808080);
+            text-align: center;
+            padding: 20px;
+            color: white;
+        }
+        .container {
+            max-width: 400px;
+            margin: auto;
+            background: #333;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        h1 {
+            color: #FFD700;
+        }
+        input {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #555;
+            border-radius: 5px;
+            background: #222;
+            color: white;
+        }
+        button {
+            background: #FFD700;
+            color: black;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #FFA500;
+        }
+        .error {
+            color: red;
+            margin-top: 10px;
+        }
+        .success {
+            color: green;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Login</h1>
+        <div id="success-message" class="success"></div>
+        <input type="text" id="username" placeholder="Enter your username">
+        <input type="password" id="password" placeholder="Enter your password">
+        <button onclick="authenticate()">Login</button>
+        <div id="error-message" class="error"></div>
+    </div>
+
+    <script>
+        function authenticate() {
+            let username = document.getElementById("username").value;
+            let password = document.getElementById("password").value;
+            let errorMessage = document.getElementById("error-message");
+            let successMessage = document.getElementById("success-message");
+
+            if (!username.trim() || !password.trim()) {
+                errorMessage.innerHTML = "Both fields are required!";
+                return;
+            }
+            login(username,password,successMessage)
+        }
+
+        async function login(user,password,successMessage){
+               let response=await fetch("/login" ,{
+                 method:"POST",
+                  headers: {
+                        'Content-Type': 'application/json'
+                    },
+                  body: JSON.stringify({ username:user,password:password})
+
+               });
+               let data=await response.json();
+               successMessage.innerText=data['message'];
+               setTimeout(()=>{
+               if (response.ok) {
+                        window.location.href = "/admin_page"; // Redirect to the new page
+               }
+
+               },500)
+        }
+
+
+    </script>
+</body>
+</html>

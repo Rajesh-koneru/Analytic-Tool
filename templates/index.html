@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> AI Analyst Tool</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #4CAF50, #FFEB3B);
+            text-align: center;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        h1 {
+            color: #4CAF50;
+        }
+        input {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #388E3C;
+        }
+        .response {
+            margin-top: 20px;
+            padding: 15px;
+            background: #FFEB3B;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1> AI Analyst Tool</h1>
+        <input type="text" id="question" placeholder="Ask a question...">
+        <button onclick="getAnswer()">Submit</button>
+        <div id="answer" class="response"></div>
+    </div>
+
+    <script>
+    function getAnswer(){
+        let question = document.getElementById("question").value;
+        let answerDiv = document.getElementById("answer");
+
+        if (!question.trim()) {
+            answerDiv.innerHTML = "Please enter a question!";
+            return;
+        }
+
+        // Call sendData function to fetch the answer
+        sendData(question, answerDiv);
+    }
+
+    function sendData(query, answerDiv) {
+        event.preventDefault(); // Prevent form submission (if applicable)
+
+        async function fetch_data() {
+            try {
+                const response = await fetch('/get_data', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ query: query }) // Send actual input value
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                console.log('Response:', data);
+
+                let responseHTML = `<h1>${data.message || "AI Response"}</h1>`;
+
+                if (data.values && Array.isArray(data.values)) {
+                    responseHTML += "<ul>";
+                    data.values.forEach(value => {
+                        responseHTML += `<li>${value}</li>`;
+                    });
+                    responseHTML += "</ul>";
+                }
+                // Update answerDiv with the fetched response
+                answerDiv.innerHTML =responseHTML || "I'm still learning! Try another question.";
+            } catch (error) {
+                console.error('Error:', error);
+                answerDiv.innerHTML = "Error fetching data!";
+            }
+        }
+
+        fetch_data();
+    }
+     function display(data,answerDiv){
+
+
+
+
+     }
+</script>
+</body>
+</html>
