@@ -43,7 +43,7 @@
         .response {
             margin-top: 20px;
             padding: 15px;
-            background: #FFEB3B;
+            background: lightgrey;
             border-radius: 5px;
             font-weight: bold;
         }
@@ -91,12 +91,12 @@
                 const data = await response.json();
                 console.log('Response:', data);
 
-                let responseHTML = `<h1>${data.message || "AI Response"}</h1>`;
+                let responseHTML = `<h1>AI Response</h1>`;
 
                 if (data.values && Array.isArray(data.values)) {
                     responseHTML += "<ul>";
                     data.values.forEach(value => {
-                        responseHTML += `<li>${value}</li>`;
+                        responseHTML += `<li>${value[1]}Rs/-</li>`;
                     });
                     responseHTML += "</ul>";
                 }
@@ -111,8 +111,6 @@
         fetch_data();
     }
      function display(data,answerDiv){
-
-
 
 
      }

@@ -47,10 +47,10 @@ def insert_data():
     query = """INSERT INTO sales (Date, sale, region) VALUES (?, ?, ?)"""
 
     data = [
-        ("2025-01-01", 122000, "north"),
-        ("2025-02-02", 300000, "south"),
-        ("2025-03-03", 40000, "north"),
-        ("2025-04-04", 2030043, "east")
+        ("2025-05-01", 123400, "north"),
+        ("2025-06-01", 600000, "south"),
+        ("2025-07-01", 900000, "north"),
+        ("2025-08-01", 3030043, "east")
     ]
 
     conn = sqlite3.connect(DATABASE)

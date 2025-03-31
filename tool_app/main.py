@@ -6,8 +6,7 @@ DATABASE = "database.db"
 
 def get_db_connection():
     """Creates a database connection and returns the connection object."""
-    conn = sqlite3.connect("../database.db")
-    print('connted to ')
+    conn = sqlite3.connect("database.db")
     # To return dictionary-like results
     return conn
 
@@ -20,6 +19,9 @@ def process_data(query):
         cursor.execute("SELECT * FROM sales")
         data = cursor.fetchall()
         print(data)
+        conn.close()
+        return data  # Convert results to list of dictionaries
+
 
     elif  'region' in query and 'sales' in query:
         for region in ['north', 'south', 'east', 'west']:
@@ -28,30 +30,41 @@ def process_data(query):
                 data = cursor.fetchall()
                 print("the data",data)
                 break
+
+
         else:
             data = []
 
-    elif 'total' in query and 'month' in query and '1-1-2025' in query:
-        cursor.execute("SELECT * FROM sales WHERE Date=?", ('2025-01-01',))
-        data = cursor.fetchall()
+        conn.close()
+        return data
 
-    else:
-        data = []
+    elif 'total' in query and 'month' in query :
+        dates=['2025-05-01','2025-06-01','2025-07-01','2025-08-01','2025-01-01','2025-02-02','2025-03-03']
+        for i in dates:
+            if i in query:
 
-    conn.close()
-    return data  # Convert results to list of dictionaries
+                cursor.execute("SELECT * FROM sales WHERE Date=?", (i,))
+                data = cursor.fetchall()
+                break
+
+        else:
+            data = []
+
+
+        conn.close()
+        return data  # Convert results to list of dictionaries
 
 @tool.route('/get_data', methods=['POST'])
 def get_data():
     """API endpoint to receive user queries and return processed results."""
     data = request.get_json()
-    data = data.get("query", "")
-    query= data.split()
+    query = data.get("query", "")
+
     print(query)
 
     response = process_data(query)
     print(f'the response is {response}')
-    return jsonify({"message":f" your {data} is ",'values':response} )  # Convert to JSON before returning
+    return jsonify({'values':response })  # Convert to JSON before returning
 
 @tool.route('/health', methods=['GET'])
 def health_check():
