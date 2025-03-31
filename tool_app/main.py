@@ -1,12 +1,12 @@
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify, render_template,Blueprint
 import sqlite3
 
-tool = Flask(__name__)
+tool = Blueprint("tool",__name__)
 DATABASE = "database.db"
 
 def get_db_connection():
     """Creates a database connection and returns the connection object."""
-    conn = sqlite3.connect("database.db")
+    conn = sqlite3.connect("../database.db")
     print('connted to ')
     # To return dictionary-like results
     return conn
@@ -79,10 +79,6 @@ def Ai_tool():
     return render_template('index.html')
 
 
-@tool.route('/')
-def login_page():
-    return render_template('login.html')
 
 
-if __name__ == '__main__':
-    tool.run(debug=True)
+
