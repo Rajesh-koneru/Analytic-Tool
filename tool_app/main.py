@@ -18,7 +18,7 @@ def process_data(query):
     if 'total' in query and 'sales' in query and 'region' not in query and 'month' not in query:
         cursor.execute("SELECT * FROM sales")
         data = cursor.fetchall()
-        print(data)
+        print("the data is :",data)
         conn.close()
         return data  # Convert results to list of dictionaries
 
